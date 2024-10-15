@@ -18,20 +18,18 @@ async function searchChemical() {
         }
 
         const data = await response.json();
-
-        // Extract SDF content from the response
         const sdfContent = data.contents;
 
+        // Display the compound name
+        document.getElementById('compound-name').innerHTML = `<h2>${chemical.charAt(0).toUpperCase() + chemical.slice(1)}</h2>`;
+
         // Display 2D representation using ChemDoodle
-        const lineStructureDiv = document.getElementById('line-structure');
-        lineStructureDiv.innerHTML = '<h4>2D Structure:</h4>';
         const sketcher = new ChemDoodle.ViewerCanvas('line-structure-sketcher', 400, 300);
-        lineStructureDiv.appendChild(sketcher.getHTMLContainer());
         sketcher.loadMolecule(ChemDoodle.readMOL(sdfContent));
 
         // 3D model view using 3Dmol.js
         const container = document.getElementById('three-d-view');
-        container.innerHTML = '<h4>3D Model:</h4>';
+        container.innerHTML = '';
         const viewer = $3Dmol.createViewer(container, { backgroundColor: 'white' });
         viewer.addModel(sdfContent, 'sdf'); // Load the fetched SDF content for the 3D model
         viewer.setStyle({}, { stick: {} });
