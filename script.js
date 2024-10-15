@@ -25,24 +25,38 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const data = await response.json();
-            const compound = data?.PC_Compounds ? data.PC_Compounds[0] : null;
-            console.log('Chemical data fetched successfully.');
+            const compound = data?.contents ? JSON.parse(data.contents) : null;
 
-            if (compound) {
+            if (compound && compound.PC_Compounds && compound.PC_Compounds.length > 0) {
+                const compoundInfo = compound.PC_Compounds[0];
+
                 // Display compound name
                 document.getElementById('compound-name').innerHTML = `<h2>${chemical.charAt(0).toUpperCase() + chemical.slice(1)}</h2>`;
 
                 // Display molecular formula
-                document.getElementById('molecular-formula').innerHTML = `<h4>Molecular Formula:</h4><p>${compound.props.find(prop => prop.urn.label === 'Molecular Formula').value.sval}</p>`;
+                const molecularFormula = compoundInfo.props?.find(prop => prop.urn.label === 'Molecular Formula');
+                document.getElementById('molecular-formula').innerHTML = molecularFormula
+                    ? `<h4>Molecular Formula:</h4><p>${molecularFormula.value.sval}</p>`
+                    : `<h4>Molecular Formula:</h4><p>Not available</p>`;
 
                 // Display molecular weight
-                document.getElementById('molecular-weight').innerHTML = `<h4>Molecular Weight:</h4><p>${compound.props.find(prop => prop.urn.label === 'Molecular Weight').value.fval}</p>`;
+                const molecularWeight = compoundInfo.props?.find(prop => prop.urn.label === 'Molecular Weight');
+                document.getElementById('molecular-weight').innerHTML = molecularWeight
+                    ? `<h4>Molecular Weight:</h4><p>${molecularWeight.value.fval}</p>`
+                    : `<h4>Molecular Weight:</h4><p>Not available</p>`;
 
                 // Display synonyms
-                document.getElementById('synonyms').innerHTML = `<h4>Synonyms:</h4><p>${compound.props.filter(prop => prop.urn.label.includes('Name')).map(prop => prop.value.sval).join(', ')}</p>`;
+                const synonyms = compoundInfo.props?.filter(prop => prop.urn.label.includes('Name')).map(prop => prop.value.sval);
+                document.getElementById('synonyms').innerHTML = synonyms && synonyms.length > 0
+                    ? `<h4>Synonyms:</h4><p>${synonyms.join(', ')}</p>`
+                    : `<h4>Synonyms:</h4><p>Not available</p>`;
 
                 // Display additional information link
-                document.getElementById('more-info').innerHTML = `<h4>More Information:</h4><p><a href="https://pubchem.ncbi.nlm.nih.gov/compound/${compound.id.id.cid}" target="_blank">More details on PubChem</a></p>`;
+                const cid = compoundInfo.id?.id?.cid;
+                document.getElementById('more-info').innerHTML = cid
+                    ? `<h4>More Information:</h4><p><a href="https://pubchem.ncbi.nlm.nih.gov/compound/${cid}" target="_blank">More details on PubChem</a></p>`
+                    : `<h4>More Information:</h4><p>Not available</p>`;
+
             } else {
                 alert('No information found for the given chemical.');
             }
