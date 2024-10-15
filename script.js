@@ -24,7 +24,7 @@ async function searchChemical() {
         document.getElementById('compound-name').innerHTML = `<h2>${chemical.charAt(0).toUpperCase() + chemical.slice(1)}</h2>`;
 
         // Display 2D representation using ChemDoodle
-        const sketcher = new ChemDoodle.ViewerCanvas('line-structure-sketcher', 400, 300);
+        const sketcher = new ChemDoodle.SketcherCanvas('line-structure-sketcher', 400, 300);
         sketcher.loadMolecule(ChemDoodle.readMOL(sdfContent));
 
         // 3D model view using 3Dmol.js
