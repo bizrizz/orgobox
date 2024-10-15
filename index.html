@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2566">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Organic Chemistry Explorer&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel="stylesheet" href="styles.css"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/3dmol/build/3Dmol-min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.jsdelivr.net/npm/chemdoodle@9.1.0/build/chemdoodle.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel="stylesheet" href="styles.css"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="script.js" defer&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;header&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1&gt;Organic Chemistry Explorer&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="input-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2&gt;Find Chemical Structures and Information&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="text" id="chemical-input" placeholder="Enter chemical formula or name"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="searchChemical()"&gt;Search&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="results-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3&gt;Results:&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="line-structure"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="lewis-structure"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="chemical-names"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="stereoisomers"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="chemical-properties"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="more-info"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="three-d-view"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;footer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;&amp;copy; 2024 Organic Chemistry Explorer&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/footer&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function searchChemical() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const chemical = document.getElementById('chemical-input').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!chemical) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('Please enter a chemical formula or name.');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Use PubChem API to fetch chemical information</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const pubChemUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${chemical}/JSON`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const response = await fetch(pubChemUrl);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const data = await response.json();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const compound = data.PC_Compounds ? data.PC_Compounds[0] : null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (compound) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Display line structure using ChemDoodle</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const lineStructureDiv = document.getElementById('line-structure');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>lineStructureDiv.innerHTML = '&lt;h4&gt;Line Structure:&lt;/h4&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const sketcher = new ChemDoodle.SketcherCanvas('line-structure-sketcher', 400, 300);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>lineStructureDiv.appendChild(sketcher.getHTMLContainer());</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>sketcher.loadMolecule(ChemDoodle.readMOL(compound.props[0].value.sval));</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Display Lewis structure (placeholder)</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('lewis-structure').innerHTML = `&lt;h4&gt;Lewis Structure:&lt;/h4&gt;&lt;p&gt;Lewis structure for ${chemical}...&lt;/p&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Display chemical names</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('chemical-names').innerHTML = `&lt;h4&gt;Names:&lt;/h4&gt;&lt;p&gt;${compound.props.map(prop =&gt; prop.urn.label + ': ' + prop.value.sval).join(', ')}&lt;/p&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Display stereoisomers (placeholder)</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('stereoisomers').innerHTML = `&lt;h4&gt;Stereoisomers:&lt;/h4&gt;&lt;p&gt;Stereoisomers for ${chemical}...&lt;/p&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Display chemical properties (e.g., molecular weight)</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('chemical-properties').innerHTML = `&lt;h4&gt;Chemical Properties:&lt;/h4&gt;&lt;p&gt;Molecular weight: ${compound.props.find(prop =&gt; prop.urn.label === 'Molecular Weight').value.fval}&lt;/p&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Display more information (link to PubChem)</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('more-info').innerHTML = `&lt;h4&gt;More Information:&lt;/h4&gt;&lt;p&gt;&lt;a href="https://pubchem.ncbi.nlm.nih.gov/compound/${compound.id.id.cid}" target="_blank"&gt;More details on PubChem&lt;/a&gt;&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>alert('No information found for the given chemical.');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Error fetching chemical data:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('There was an error retrieving the chemical information. Please try again later.');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 3D model view using 3Dmol.js</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('three-d-view');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>container.innerHTML = '&lt;h4&gt;3D Model:&lt;/h4&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const viewer = $3Dmol.createViewer(container, { backgroundColor: 'white' });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>viewer.addModel('CCO', 'sdf'); // Placeholder: use a proper chemical formula or structure</p>
+<p class="p1"><span class="Apple-converted-space">            </span>viewer.setStyle({}, { stick: {} });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>viewer.zoomTo();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>viewer.render();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
