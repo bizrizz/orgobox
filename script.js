@@ -23,9 +23,10 @@ async function searchChemical() {
         // Display the compound name
         document.getElementById('compound-name').innerHTML = `<h2>${chemical.charAt(0).toUpperCase() + chemical.slice(1)}</h2>`;
 
-        // Display 2D representation using ChemDoodle
-        const sketcher = new ChemDoodle.SketcherCanvas('line-structure-sketcher', 400, 300);
-        sketcher.loadMolecule(ChemDoodle.readMOL(sdfContent));
+        // Display 2D representation using OpenChemLib
+        const molecule = OCL.Molecule.fromMolfile(sdfContent);
+        const svg = molecule.toSVG(400, 300); // SVG rendering
+        document.getElementById('line-structure-sketcher').innerHTML = svg;
 
         // 3D model view using 3Dmol.js
         const container = document.getElementById('three-d-view');
