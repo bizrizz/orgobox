@@ -19,8 +19,17 @@ async function searchChemical() {
 
         const data = await response.json();
 
+        // Log the full response for debugging purposes
+        console.log('Full response from AllOrigins:', data);
+
+        if (!data.contents) {
+            throw new Error('No content found in the response from AllOrigins');
+        }
+
         // Properly parse the JSON content returned by AllOrigins
-        const jsonResponse = JSON.parse(data.contents); // Extract the actual content
+        const jsonResponse = JSON.parse(data.contents);
+        console.log('Parsed JSON response:', jsonResponse);
+
         const compound = jsonResponse.PC_Compounds ? jsonResponse.PC_Compounds[0] : null;
 
         if (compound) {
