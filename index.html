@@ -1,36 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<<head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organic Chemistry Explorer</title>
     <link rel="stylesheet" href="styles.css">
+
+    <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://unpkg.com/3dmol/build/3Dmol-min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chemdoodle@9.1.0/build/chemdoodle.min.js"></script> <!-- Make sure this is loaded before your script -->
+    <script src="https://cdn.jsdelivr.net/npm/chemdoodle@9.1.0/build/chemdoodle.min.js"></script> <!-- Alternatively use local version -->
+    
+    <!-- Custom Script -->
     <script defer src="script.js"></script>
 </head>
+
 <body>
     <header>
         <h1>Organic Chemistry Explorer</h1>
-        <p>Explore the structures and properties of organic compounds.</p>
+        <p>Explore the structures and properties of organic compounds with ease.</p>
     </header>
-    
+
     <main>
+        <!-- Input Section -->
         <section id="input-section">
             <div class="input-container">
                 <h2>Find Chemical Structures and Information</h2>
-                <input type="text" id="chemical-input" placeholder="Enter chemical formula or name">
+                <input type="text" id="chemical-input" placeholder="Enter chemical name or formula...">
                 <button onclick="searchChemical()">Search</button>
             </div>
         </section>
 
+        <!-- Results Section -->
         <section id="results-section">
             <div id="compound-name" class="card"></div>
             <div id="molecular-formula" class="card"></div>
             <div id="molecular-weight" class="card"></div>
             <div id="synonyms" class="card"></div>
             <div id="safety" class="card"></div>
+            
+            <!-- 2D and 3D Structure Sections -->
             <div id="line-structure" class="card">
                 <h4>2D Structure:</h4>
                 <canvas id="line-structure-sketcher"></canvas>
@@ -38,12 +48,14 @@
             <div id="three-d-view" class="card">
                 <h4>3D Model:</h4>
             </div>
+
             <div id="more-info" class="card"></div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Organic Chemistry Explorer</p>
+        <p>&copy; 2024 Organic Chemistry Explorer. All rights reserved.</p>
     </footer>
 </body>
+
 </html>
