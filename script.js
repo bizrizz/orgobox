@@ -19,13 +19,6 @@ async function searchChemical() {
 
         const data = await response.json();
 
-        // Log the full response for debugging purposes
-        console.log('Full response from AllOrigins:', data);
-
-        if (!data.contents) {
-            throw new Error('No content found in the response from AllOrigins');
-        }
-
         // Properly parse the JSON content returned by AllOrigins
         const jsonResponse = JSON.parse(data.contents);
         console.log('Parsed JSON response:', jsonResponse);
@@ -33,24 +26,32 @@ async function searchChemical() {
         const compound = jsonResponse.PC_Compounds ? jsonResponse.PC_Compounds[0] : null;
 
         if (compound) {
-            // Display line structure (placeholder)
-            document.getElementById('line-structure').innerHTML = `<h4>Line Structure:</h4><p>Line structure for ${chemical}...</p>`;
+            const props = compound.props || [];
 
-            // Display Lewis structure (placeholder)
-            document.getElementById('lewis-structure').innerHTML = `<h4>Lewis Structure:</h4><p>Lewis structure for ${chemical}...</p>`;
+            // Extracting relevant properties
+            const molecularWeightProp = props.find(prop => prop.urn.label === 'Molecular Weight');
+            const molecularWeight = molecularWeightProp ? molecularWeightProp.value.fval : 'N/A';
 
-            // Display chemical names
-            document.getElementById('chemical-names').innerHTML = `<h4>Names:</h4><p>${compound.props.map(prop => prop.urn.label + ': ' + prop.value.sval).join(', ')}</p>`;
+            const synonyms = compound.synonyms ? compound.synonyms.join(', ') : 'N/A';
 
-            // Display stereoisomers (placeholder)
-            document.getElementById('stereoisomers').innerHTML = `<h4>Stereoisomers:</h4><p>Stereoisomers for ${chemical}...</p>`;
+            const molecularFormula = props.find(prop => prop.urn.label === 'Molecular Formula');
+            const molecularFormulaValue = molecularFormula ? molecularFormula.value.sval : 'N/A';
 
-            // Display chemical properties (e.g., molecular weight)
-            const molecularWeight = compound.props.find(prop => prop.urn.label === 'Molecular Weight');
-            document.getElementById('chemical-properties').innerHTML = `<h4>Chemical Properties:</h4><p>Molecular weight: ${molecularWeight ? molecularWeight.value.fval : 'N/A'}</p>`;
+            const compoundCID = compound.id && compound.id.id && compound.id.id.cid ? compound.id.id.cid : null;
+
+            // Update the HTML to display the information
+            document.getElementById('compound-name').innerHTML = `<h2>${chemical.charAt(0).toUpperCase() + chemical.slice(1)}</h2>`;
+            document.getElementById('molecular-formula').innerHTML = `<h4>Molecular Formula:</h4><p>${molecularFormulaValue}</p>`;
+            document.getElementById('molecular-weight').innerHTML = `<h4>Molecular Weight:</h4><p>${molecularWeight} g/mol</p>`;
+            document.getElementById('synonyms').innerHTML = `<h4>Synonyms:</h4><p>${synonyms}</p>`;
+            document.getElementById('safety').innerHTML = `<h4>Chemical Safety:</h4><p>Safety information not available from this endpoint</p>`;
 
             // Display more information (link to PubChem)
-            document.getElementById('more-info').innerHTML = `<h4>More Information:</h4><p><a href="https://pubchem.ncbi.nlm.nih.gov/compound/${compound.id.id.cid}" target="_blank">More details on PubChem</a></p>`;
+            if (compoundCID) {
+                document.getElementById('more-info').innerHTML = `<h4>More Information:</h4><p><a href="https://pubchem.ncbi.nlm.nih.gov/compound/${compoundCID}" target="_blank">More details on PubChem</a></p>`;
+            } else {
+                document.getElementById('more-info').innerHTML = `<h4>More Information:</h4><p>No additional information available</p>`;
+            }
         } else {
             alert('No information found for the given chemical.');
         }
@@ -58,13 +59,4 @@ async function searchChemical() {
         console.error('Error fetching chemical data:', error);
         alert(`There was an error retrieving the chemical information. Details: ${error.message}`);
     }
-
-    // 3D model view using 3Dmol.js
-    const container = document.getElementById('three-d-view');
-    container.innerHTML = '<h4>3D Model:</h4>';
-    const viewer = $3Dmol.createViewer(container, { backgroundColor: 'white' });
-    viewer.addModel('CCO', 'sdf'); // Placeholder: replace with proper model
-    viewer.setStyle({}, { stick: {} });
-    viewer.zoomTo();
-    viewer.render();
 }
