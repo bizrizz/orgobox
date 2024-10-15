@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log('DOM fully loaded and parsed.');
 
+    // Function to load script dynamically
     function loadScript(src, callback) {
         console.log(`Attempting to load script: ${src}`);
         const script = document.createElement('script');
@@ -12,8 +13,28 @@ document.addEventListener("DOMContentLoaded", function () {
         script.onerror = function () {
             console.error(`Failed to load script: ${src}`);
             alert(`Error loading script: ${src}. Please try again.`);
+            triggerNotification(`Error loading script: ${src}`);
         };
         document.head.appendChild(script);
+    }
+
+    // Function to trigger browser notification
+    function triggerNotification(message) {
+        if (Notification.permission === "granted") {
+            new Notification("Organic Chemistry Explorer", {
+                body: message,
+                icon: "https://cdn-icons-png.flaticon.com/512/2821/2821793.png", // You can use any icon you want
+            });
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    new Notification("Organic Chemistry Explorer", {
+                        body: message,
+                        icon: "https://cdn-icons-png.flaticon.com/512/2821/2821793.png",
+                    });
+                }
+            });
+        }
     }
 
     // Load OpenChemLib dynamically
@@ -21,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (typeof OCL === 'undefined') {
             console.error('OpenChemLib (OCL) did not initialize correctly.');
             alert('Failed to initialize OpenChemLib. Please refresh the page.');
+            triggerNotification('Failed to initialize OpenChemLib. Please refresh the page.');
             return;
         }
 
@@ -35,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         } else {
             console.error('Search button not found.');
+            triggerNotification('Search button not found.');
         }
     });
 
@@ -90,6 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
             console.error('Error fetching chemical data:', error);
             alert(`There was an error retrieving the chemical information. Details: ${error.message}`);
+            triggerNotification(`There was an error retrieving the chemical information: ${error.message}`);
         }
     }
 });
