@@ -5,44 +5,60 @@ async function searchChemical() {
         return;
     }
 
-    // Use PubChem API to fetch chemical information
+    // PubChem API URL
     const pubChemUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${chemical}/JSON`;
-    try {
-        // Use a CORS proxy to bypass CORS restrictions
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        const response = await fetch(proxyUrl + pubChemUrl);
-        
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+
+    // List of CORS proxies to try
+    const proxyUrls = [
+        'https://thingproxy.freeboard.io/fetch/',
+        'https://cors.bridged.cc/',
+        'https://api.allorigins.win/get?url='
+    ];
+
+    // Attempt each proxy in sequence
+    let success = false;
+    for (const proxyUrl of proxyUrls) {
+        try {
+            const response = await fetch(proxyUrl + encodeURIComponent(pubChemUrl));
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            const compound = data.PC_Compounds ? data.PC_Compounds[0] : null;
+
+            if (compound) {
+                // Display line structure (placeholder)
+                document.getElementById('line-structure').innerHTML = `<h4>Line Structure:</h4><p>Line structure for ${chemical}...</p>`;
+
+                // Display Lewis structure (placeholder)
+                document.getElementById('lewis-structure').innerHTML = `<h4>Lewis Structure:</h4><p>Lewis structure for ${chemical}...</p>`;
+
+                // Display chemical names
+                document.getElementById('chemical-names').innerHTML = `<h4>Names:</h4><p>${compound.props.map(prop => prop.urn.label + ': ' + prop.value.sval).join(', ')}</p>`;
+
+                // Display stereoisomers (placeholder)
+                document.getElementById('stereoisomers').innerHTML = `<h4>Stereoisomers:</h4><p>Stereoisomers for ${chemical}...</p>`;
+
+                // Display chemical properties (e.g., molecular weight)
+                const molecularWeight = compound.props.find(prop => prop.urn.label === 'Molecular Weight');
+                document.getElementById('chemical-properties').innerHTML = `<h4>Chemical Properties:</h4><p>Molecular weight: ${molecularWeight ? molecularWeight.value.fval : 'N/A'}</p>`;
+
+                // Display more information (link to PubChem)
+                document.getElementById('more-info').innerHTML = `<h4>More Information:</h4><p><a href="https://pubchem.ncbi.nlm.nih.gov/compound/${compound.id.id.cid}" target="_blank">More details on PubChem</a></p>`;
+
+                success = true;
+                break;
+            } else {
+                alert('No information found for the given chemical.');
+            }
+        } catch (error) {
+            console.error('Error fetching chemical data using proxy:', proxyUrl, error);
+            continue; // Try the next proxy in case of failure
         }
+    }
 
-        const data = await response.json();
-        const compound = data.PC_Compounds ? data.PC_Compounds[0] : null;
-
-        if (compound) {
-            // Display line structure (placeholder)
-            document.getElementById('line-structure').innerHTML = `<h4>Line Structure:</h4><p>Line structure for ${chemical}...</p>`;
-
-            // Display Lewis structure (placeholder)
-            document.getElementById('lewis-structure').innerHTML = `<h4>Lewis Structure:</h4><p>Lewis structure for ${chemical}...</p>`;
-
-            // Display chemical names
-            document.getElementById('chemical-names').innerHTML = `<h4>Names:</h4><p>${compound.props.map(prop => prop.urn.label + ': ' + prop.value.sval).join(', ')}</p>`;
-
-            // Display stereoisomers (placeholder)
-            document.getElementById('stereoisomers').innerHTML = `<h4>Stereoisomers:</h4><p>Stereoisomers for ${chemical}...</p>`;
-
-            // Display chemical properties (e.g., molecular weight)
-            const molecularWeight = compound.props.find(prop => prop.urn.label === 'Molecular Weight');
-            document.getElementById('chemical-properties').innerHTML = `<h4>Chemical Properties:</h4><p>Molecular weight: ${molecularWeight ? molecularWeight.value.fval : 'N/A'}</p>`;
-
-            // Display more information (link to PubChem)
-            document.getElementById('more-info').innerHTML = `<h4>More Information:</h4><p><a href="https://pubchem.ncbi.nlm.nih.gov/compound/${compound.id.id.cid}" target="_blank">More details on PubChem</a></p>`;
-        } else {
-            alert('No information found for the given chemical.');
-        }
-    } catch (error) {
-        console.error('Error fetching chemical data:', error);
+    if (!success) {
         alert('There was an error retrieving the chemical information. Please try again later.');
     }
 
