@@ -8,24 +8,17 @@ async function searchChemical() {
     // PubChem API URL
     const pubChemUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${chemical}/JSON`;
 
-    // Use AllOrigins API to bypass CORS
-    const allOriginsUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(pubChemUrl)}`;
+    // Use a different CORS proxy to bypass CORS
+    const proxyUrl = 'https://corsproxy.io/?';
 
     try {
-        const response = await fetch(allOriginsUrl);
+        const response = await fetch(proxyUrl + encodeURIComponent(pubChemUrl));
         if (!response.ok) {
             throw new Error(`Network response was not ok. Status: ${response.status}, StatusText: ${response.statusText}`);
         }
 
         const data = await response.json();
-
-        // Check if the contents were actually returned correctly
-        if (!data.contents) {
-            throw new Error('No content returned from AllOrigins API');
-        }
-
-        const jsonResponse = JSON.parse(data.contents); // Extract the actual content
-        const compound = jsonResponse.PC_Compounds ? jsonResponse.PC_Compounds[0] : null;
+        const compound = data.PC_Compounds ? data.PC_Compounds[0] : null;
 
         if (compound) {
             // Display line structure (placeholder)
