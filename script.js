@@ -14,10 +14,16 @@ async function searchChemical() {
     try {
         const response = await fetch(allOriginsUrl);
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(`Network response was not ok. Status: ${response.status}, StatusText: ${response.statusText}`);
         }
 
         const data = await response.json();
+
+        // Check if the contents were actually returned correctly
+        if (!data.contents) {
+            throw new Error('No content returned from AllOrigins API');
+        }
+
         const jsonResponse = JSON.parse(data.contents); // Extract the actual content
         const compound = jsonResponse.PC_Compounds ? jsonResponse.PC_Compounds[0] : null;
 
@@ -45,7 +51,7 @@ async function searchChemical() {
         }
     } catch (error) {
         console.error('Error fetching chemical data:', error);
-        alert('There was an error retrieving the chemical information. Please try again later.');
+        alert(`There was an error retrieving the chemical information. Details: ${error.message}`);
     }
 
     // 3D model view using 3Dmol.js
