@@ -7,10 +7,6 @@
     <title>Organic Chemistry Explorer</title>
     <link rel="stylesheet" href="styles.css">
 
-    <!-- Free Libraries for 2D and 3D visualization -->
-    <script defer src="https://unpkg.com/openchemlib/full.js"></script>
-    <script defer src="https://unpkg.com/3dmol/build/3Dmol-min.js"></script>
-
     <!-- Custom Script -->
     <script defer src="script.js"></script>
 </head>
@@ -25,7 +21,7 @@
         <!-- Input Section -->
         <section id="input-section">
             <div class="input-container">
-                <h2>Find Chemical Structures and Information</h2>
+                <h2>Find Chemical Information</h2>
                 <input type="text" id="chemical-input" placeholder="Enter chemical name or formula...">
                 <button onclick="searchChemical()">Search</button>
             </div>
@@ -38,16 +34,6 @@
             <div id="molecular-weight" class="card"></div>
             <div id="synonyms" class="card"></div>
             <div id="safety" class="card"></div>
-
-            <!-- 2D and 3D Structure Sections -->
-            <div id="line-structure" class="card">
-                <h4>2D Structure:</h4>
-                <div id="line-structure-sketcher"></div>
-            </div>
-            <div id="three-d-view" class="card">
-                <h4>3D Model:</h4>
-            </div>
-
             <div id="more-info" class="card"></div>
         </section>
     </main>
