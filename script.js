@@ -25,38 +25,34 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const data = await response.json();
-            const compound = data?.contents ? JSON.parse(data.contents) : null;
+            const parsedData = JSON.parse(data.contents);
+            const compound = parsedData?.Record ? parsedData.Record : null;
 
-            if (compound && compound.PC_Compounds && compound.PC_Compounds.length > 0) {
-                const compoundInfo = compound.PC_Compounds[0];
-
+            if (compound) {
                 // Display compound name
-                document.getElementById('compound-name').innerHTML = `<h2>${chemical.charAt(0).toUpperCase() + chemical.slice(1)}</h2>`;
+                document.getElementById('compound-name').innerHTML = `<h2>${compound.RecordTitle}</h2>`;
 
                 // Display molecular formula
-                const molecularFormula = compoundInfo.props?.find(prop => prop.urn.label === 'Molecular Formula');
-                document.getElementById('molecular-formula').innerHTML = molecularFormula
-                    ? `<h4>Molecular Formula:</h4><p>${molecularFormula.value.sval}</p>`
+                const formulaSection = compound.Section.find(section => section.TOCHeading === "Molecular Formula");
+                document.getElementById('molecular-formula').innerHTML = formulaSection
+                    ? `<h4>Molecular Formula:</h4><p>${formulaSection.Information[0].Value.StringWithMarkup[0].String}</p>`
                     : `<h4>Molecular Formula:</h4><p>Not available</p>`;
 
                 // Display molecular weight
-                const molecularWeight = compoundInfo.props?.find(prop => prop.urn.label === 'Molecular Weight');
-                document.getElementById('molecular-weight').innerHTML = molecularWeight
-                    ? `<h4>Molecular Weight:</h4><p>${molecularWeight.value.fval}</p>`
+                const weightSection = compound.Section.find(section => section.TOCHeading === "Molecular Weight");
+                document.getElementById('molecular-weight').innerHTML = weightSection
+                    ? `<h4>Molecular Weight:</h4><p>${weightSection.Information[0].Value.Number[0]}</p>`
                     : `<h4>Molecular Weight:</h4><p>Not available</p>`;
 
                 // Display synonyms
-                const synonyms = compoundInfo.props?.filter(prop => prop.urn.label.includes('Name')).map(prop => prop.value.sval);
-                document.getElementById('synonyms').innerHTML = synonyms && synonyms.length > 0
+                const synonymsSection = compound.Section.find(section => section.TOCHeading === "Synonyms");
+                const synonyms = synonymsSection ? synonymsSection.Information[0].Value.StringWithMarkup.map(item => item.String) : [];
+                document.getElementById('synonyms').innerHTML = synonyms.length > 0
                     ? `<h4>Synonyms:</h4><p>${synonyms.join(', ')}</p>`
                     : `<h4>Synonyms:</h4><p>Not available</p>`;
 
                 // Display additional information link
-                const cid = compoundInfo.id?.id?.cid;
-                document.getElementById('more-info').innerHTML = cid
-                    ? `<h4>More Information:</h4><p><a href="https://pubchem.ncbi.nlm.nih.gov/compound/${cid}" target="_blank">More details on PubChem</a></p>`
-                    : `<h4>More Information:</h4><p>Not available</p>`;
-
+                document.getElementById('more-info').innerHTML = `<h4>More Information:</h4><p><a href="https://pubchem.ncbi.nlm.nih.gov/compound/${compound.RecordNumber}" target="_blank">More details on PubChem</a></p>`;
             } else {
                 alert('No information found for the given chemical.');
             }
