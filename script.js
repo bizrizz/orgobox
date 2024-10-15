@@ -5,24 +5,24 @@ async function searchChemical() {
         return;
     }
 
-    // Use PubChem API to fetch chemical information with CORS proxy
+    // Use PubChem API to fetch chemical information
     const pubChemUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${chemical}/JSON`;
     try {
-        const response = await fetch(pubChemUrl);
+        // Use a CORS proxy to bypass CORS restrictions
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const response = await fetch(proxyUrl + pubChemUrl);
+        
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
+
         const data = await response.json();
         const compound = data.PC_Compounds ? data.PC_Compounds[0] : null;
 
         if (compound) {
-            // Display line structure using ChemDoodle
-            const lineStructureDiv = document.getElementById('line-structure');
-            lineStructureDiv.innerHTML = '<h4>Line Structure:</h4>';
-            const sketcher = new ChemDoodle.SketcherCanvas('line-structure-sketcher', 400, 300);
-            lineStructureDiv.appendChild(sketcher.getHTMLContainer());
-            sketcher.loadMolecule(ChemDoodle.readMOL(compound.props[0].value.sval));
-            
+            // Display line structure (placeholder)
+            document.getElementById('line-structure').innerHTML = `<h4>Line Structure:</h4><p>Line structure for ${chemical}...</p>`;
+
             // Display Lewis structure (placeholder)
             document.getElementById('lewis-structure').innerHTML = `<h4>Lewis Structure:</h4><p>Lewis structure for ${chemical}...</p>`;
 
@@ -33,7 +33,8 @@ async function searchChemical() {
             document.getElementById('stereoisomers').innerHTML = `<h4>Stereoisomers:</h4><p>Stereoisomers for ${chemical}...</p>`;
 
             // Display chemical properties (e.g., molecular weight)
-            document.getElementById('chemical-properties').innerHTML = `<h4>Chemical Properties:</h4><p>Molecular weight: ${compound.props.find(prop => prop.urn.label === 'Molecular Weight').value.fval}</p>`;
+            const molecularWeight = compound.props.find(prop => prop.urn.label === 'Molecular Weight');
+            document.getElementById('chemical-properties').innerHTML = `<h4>Chemical Properties:</h4><p>Molecular weight: ${molecularWeight ? molecularWeight.value.fval : 'N/A'}</p>`;
 
             // Display more information (link to PubChem)
             document.getElementById('more-info').innerHTML = `<h4>More Information:</h4><p><a href="https://pubchem.ncbi.nlm.nih.gov/compound/${compound.id.id.cid}" target="_blank">More details on PubChem</a></p>`;
@@ -49,7 +50,7 @@ async function searchChemical() {
     const container = document.getElementById('three-d-view');
     container.innerHTML = '<h4>3D Model:</h4>';
     const viewer = $3Dmol.createViewer(container, { backgroundColor: 'white' });
-    viewer.addModel('CCO', 'sdf'); // Placeholder: use a proper chemical formula or structure
+    viewer.addModel('CCO', 'sdf'); // Placeholder: replace with proper model
     viewer.setStyle({}, { stick: {} });
     viewer.zoomTo();
     viewer.render();
