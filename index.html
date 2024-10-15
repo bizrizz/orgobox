@@ -7,11 +7,9 @@
     <title>Organic Chemistry Explorer</title>
     <link rel="stylesheet" href="styles.css">
 
-    <!-- Latest Libraries for 2D and 3D visualization -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Free Libraries for 2D and 3D visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/openchemlib@latest/openchemlib-full.js"></script>
     <script src="https://unpkg.com/3dmol/build/3Dmol-min.js"></script>
-    <script src="https://www.ichemlabs.com/chemdoodle/10.0.0/ChemDoodleWeb.js"></script>
-    <script src="https://www.ichemlabs.com/chemdoodle/10.0.0/ChemDoodleWeb-3D.js"></script>
 
     <!-- Custom Script -->
     <script defer src="script.js"></script>
@@ -44,7 +42,7 @@
             <!-- 2D and 3D Structure Sections -->
             <div id="line-structure" class="card">
                 <h4>2D Structure:</h4>
-                <canvas id="line-structure-sketcher"></canvas>
+                <div id="line-structure-sketcher"></div>
             </div>
             <div id="three-d-view" class="card">
                 <h4>3D Model:</h4>
