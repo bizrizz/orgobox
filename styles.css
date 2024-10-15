@@ -1,38 +1,111 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
     line-height: 1.6;
 }
 
-#results-section {
-    margin-top: 20px;
-    border: 1px solid #ddd;
+/* Header Styles */
+header {
+    text-align: center;
+    background-color: #007bff;
+    color: #fff;
     padding: 20px;
-    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#results-section h2 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
+header h1 {
+    font-size: 2.5em;
 }
 
-#results-section h4 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 15px;
+header p {
+    font-size: 1.2em;
+    margin-top: 5px;
 }
 
-#results-section p {
-    font-size: 16px;
-    margin: 5px 0;
+/* Input Section */
+#input-section {
+    padding: 30px 20px;
+    display: flex;
+    justify-content: center;
 }
 
-#three-d-view {
-    margin-top: 20px;
+.input-container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"] {
+    width: 60%;
+    padding: 10px;
+    font-size: 1.2em;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-right: 10px;
 }
 
 button {
-    padding: 10px 15px;
-    font-size: 16px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Results Section */
+#results-section {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Card Styles */
+.card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card h4 {
+    font-size: 1.5em;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 1.2em;
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #007bff;
+    color: #fff;
+    margin-top: 30px;
 }
