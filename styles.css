@@ -1,65 +1,38 @@
-/* styles.css */
-
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    color: #333;
-}
-
-header {
-    background-color: #0077b6;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-}
-
-h1 {
-    margin: 0;
-}
-
-#input-section {
-    text-align: center;
-    margin: 20px 0;
-}
-
-#input-section input {
-    padding: 10px;
-    width: 300px;
-    font-size: 1em;
-}
-
-#input-section button {
-    padding: 10px;
-    font-size: 1em;
-    background-color: #0077b6;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-#input-section button:hover {
-    background-color: #005f8a;
+    line-height: 1.6;
 }
 
 #results-section {
-    padding: 20px;
-    background: #fff;
-    max-width: 800px;
-    margin: 0 auto;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-h3 {
-    border-bottom: 2px solid #0077b6;
-    padding-bottom: 10px;
-}
-
-footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
     margin-top: 20px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+#results-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#results-section h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+#results-section p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+#three-d-view {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
 }
