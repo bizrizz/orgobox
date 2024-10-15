@@ -1,4 +1,30 @@
 document.addEventListener("DOMContentLoaded", function () {
+    function loadScript(src, callback) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = callback;
+        script.onerror = function () {
+            console.error(`Failed to load script: ${src}`);
+            alert(`Error loading script: ${src}. Please try again.`);
+        };
+        document.head.appendChild(script);
+    }
+
+    // Load OpenChemLib dynamically
+    loadScript('https://unpkg.com/openchemlib/full.js', function () {
+        console.log('OpenChemLib loaded successfully.');
+
+        // Proceed only if OCL is available
+        if (typeof OCL === 'undefined') {
+            console.error('OpenChemLib (OCL) did not initialize correctly.');
+            alert('Failed to initialize OpenChemLib. Please refresh the page.');
+            return;
+        }
+
+        // Attach the search function once OpenChemLib is loaded
+        document.querySelector("button").addEventListener("click", searchChemical);
+    });
+
     async function searchChemical() {
         const chemical = document.getElementById('chemical-input').value;
         if (!chemical) {
@@ -24,11 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // Display the compound name
             document.getElementById('compound-name').innerHTML = `<h2>${chemical.charAt(0).toUpperCase() + chemical.slice(1)}</h2>`;
 
-            // Wait for OpenChemLib to be defined before using it
-            if (typeof OCL === 'undefined') {
-                throw new Error('OpenChemLib (OCL) is not initialized. Please make sure it has loaded correctly.');
-            }
-
             // Display 2D representation using OpenChemLib
             const molecule = OCL.Molecule.fromMolfile(sdfContent);
             const svg = molecule.toSVG(400, 300); // SVG rendering
@@ -47,7 +68,4 @@ document.addEventListener("DOMContentLoaded", function () {
             alert(`There was an error retrieving the chemical information. Details: ${error.message}`);
         }
     }
-
-    // Attach the function to the search button
-    document.querySelector("button").addEventListener("click", searchChemical);
 });
